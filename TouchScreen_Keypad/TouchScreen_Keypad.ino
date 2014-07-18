@@ -4,9 +4,6 @@
   Features include display box, numerical keypad, enter (checks password)
   and clear (clears password).
   Created by Richard Kirkpatrick, 21 June 2014
-  
-  Future Upgrades:
-    - Make Keypad into a Class
 */
 
 // Define libraries
