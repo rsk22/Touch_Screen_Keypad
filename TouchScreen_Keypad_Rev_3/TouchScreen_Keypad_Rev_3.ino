@@ -19,7 +19,6 @@
 #include <TouchScreenGeometry.h>
 #include <TouchSceenStrings.h>
 
-
 #ifdef SEEEDUINO
   #define YP A2   // must be an analog pin, use "An" notation!
   #define XM A1   // must be an analog pin, use "An" notation!
@@ -46,17 +45,18 @@
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
  
-Password password = Password("1234"); // Sets the password
+
 TouchScreenKeypad keypad; // Initializes the keypad
 
 void setup() 
 {  
   // Initializes TFT library
-  Tft.init(); 
- Tft.drawRectangle(10, 3, 200,60,BLUE);
- Tft.fillRectangle(0, 80, 100,65,YELLOW);
- Tft.drawRectangle(30, 160, 60, 60,RED);
- //keypad.drawKeypad();
+ Tft.init(); 
+ keypad.drawKeypad();
+ 
+ // Set the password
+ char* myPassword = "1234";
+ keypad.setPassword(myPassword);
 }
 
 void loop() 
@@ -77,31 +77,15 @@ void loop()
   char textKeypad[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', 'E'}; // Text for the buttons
   if (userInput >= 0 && userInput != 9 && userInput != 11) {
     keypad.displayText(textKeypad[userInput]);
-    password.append(textKeypad[userInput]); // Append the number to the password
+    thePassword.append(textKeypad[userInput]); // Append the number to the password
   } else if (userInput == 9) {
-    resetPassword();
+    keypad.resetPassword();
   } else if (userInput == 11) {
-    enterPassword();
+    keypad.enterPassword();
   }
   delay(10);
 }
 
-void resetPassword()  // Clears the screen, resets the cursor and resets the password
-{
-  keypad.clearTextBlock();
-  password.reset();  
-  delay(100);
-}
 
-void enterPassword() // Clears screen and evalulates the password.
-{
-  keypad.clearTextBlock();
-  if (password.evaluate())
-    Tft.drawString("Success", 70, 25, 2, WHITE);
-  else
-    Tft.drawString("Wrong", 80, 25, 2, WHITE);
-  delay(1000);
-  password.reset();
-  keypad.clearTextBlock();
-}
+
 
