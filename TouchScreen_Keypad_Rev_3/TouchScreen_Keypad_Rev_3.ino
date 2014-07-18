@@ -44,19 +44,14 @@
 #define TS_MAXY 940
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
- 
-
 TouchScreenKeypad keypad; // Initializes the keypad
+
+Password password = Password("1234");
 
 void setup() 
 {  
-  // Initializes TFT library
- Tft.init(); 
- keypad.drawKeypad();
- 
- // Set the password
- char* myPassword = "1234";
- keypad.setPassword(myPassword);
+ Tft.init();   // Initializes TFT library
+ keypad.drawKeypad(); // Draws the keypad
 }
 
 void loop() 
@@ -77,13 +72,32 @@ void loop()
   char textKeypad[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', 'E'}; // Text for the buttons
   if (userInput >= 0 && userInput != 9 && userInput != 11) {
     keypad.displayText(textKeypad[userInput]);
-    thePassword.append(textKeypad[userInput]); // Append the number to the password
+    password.append(textKeypad[userInput]); // Append the number to the password
   } else if (userInput == 9) {
-    keypad.resetPassword();
+    resetPassword();
   } else if (userInput == 11) {
-    keypad.enterPassword();
+    enterPassword();
   }
   delay(10);
+}
+
+void resetPassword()
+{
+    keypad.clearTextBlock();
+    password.reset();
+    delay(100);
+}
+
+void enterPassword()
+{
+    keypad.clearTextBlock();
+    if (password.evaluate())
+        Tft.drawString("Success", 70, 25, 2, WHITE);
+    else
+        Tft.drawString("Wrong", 80, 25, 2, WHITE);
+    delay(1000);
+    password.reset();
+    keypad.clearTextBlock();
 }
 
 
