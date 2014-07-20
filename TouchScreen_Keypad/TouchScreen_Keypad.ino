@@ -60,7 +60,7 @@ void loop()
   
   int userInput = -1; // -1 means no button is pressed
   if (p.z > ts.pressureThreshhold) 
-    userInput = keypad.getButton(p.x, p.y); 
+    userInput = keypad.getButtonNumber(p.x, p.y); 
   
   // Highlights the button that was pressed
   keypad.displayButton(userInput);
